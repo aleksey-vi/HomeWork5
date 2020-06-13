@@ -1,48 +1,50 @@
 # Vagrant стенд для NFS
 
- Данный стенд мной брался из домашнего задания № 2, после чего был отредактирован, а именно:<br>
-
+Данный стенд мной брался из домашнего задания № 2, после чего был отредактирован, а именно:<br>
+ 
 ## Редактирование Vagrantfile
 
-MACHINES = {<br>
-        :otuslinux => {<br>
-            :box_name => "centos/7",<br>
-        :ip_addr => '192.168.11.101',<br>
-	:disks => {<br>
-		:sata1 => {<br>
-			:dfile => './sata1.vdi',<br>
-			:size => 250,<br>
-			:port => 1<br>
-		},<br>
-		:sata2 => {<br>
-                        :dfile => './sata2.vdi',<br>
-                        :size => 250, # Megabytes<br>
-			:port => 2<br>
-		},<br>
-                :sata3 => {<br>
-                        :dfile => './sata3.vdi',<br>
-                        :size => 250,<br>
-                        :port => 3<br>
-                },<br>
-                :sata4 => {<br>
-                        :dfile => './sata4.vdi',<br>
-                        :size => 250, # Megabytes<br>
-                        :port => 4<br>
-                },<br>
-		:sata5 => {<br>
-                        :dfile => './sata5.vdi', # Путь, по<b которому будет создан файл диска<br>
+ ```bash 
+
+MACHINES = {
+        :otuslinux => {
+            :box_name => "centos/7",
+        :ip_addr => '192.168.11.101',
+	:disks => {
+		:sata1 => {
+			:dfile => './sata1.vdi',
+			:size => 250,
+			:port => 1
+		},
+		:sata2 => {
+                        :dfile => './sata2.vdi',
+                        :size => 250, # Megabytes
+			:port => 2
+		},
+                :sata3 => {
+                        :dfile => './sata3.vdi',
+                        :size => 250,
+                        :port => 3
+                },
+                :sata4 => {
+                        :dfile => './sata4.vdi',
+                        :size => 250, # Megabytes
+                        :port => 4
+                },
+		:sata5 => {
+                        :dfile => './sata5.vdi', # Путь, по<b которому будет создан файл диска
                         :size => 250, # Размер диска в мегабайтах
-			:port => 5 # Номер порта на который будет зацеплен диск<br>
-		}<br>
-	}<br>
+			:port => 5 # Номер порта на который будет зацеплен диск
+		}
+	}
 
 
-  },<br>
-}<br>
-
+  },
+}
+```
 ### было заменено на: <br>
 
-MACHINES = {<br>
+MACHINES = {
   :server => {<br>
         :box_name => "centos/7",<br>
         :box_version => "1804.02",<br>
