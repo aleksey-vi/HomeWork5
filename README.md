@@ -44,19 +44,21 @@ MACHINES = {
 ```
 ### было заменено на: <br>
 
-MACHINES = {
-  :server => {<br>
-        :box_name => "centos/7",<br>
-        :box_version => "1804.02",<br>
-        :ip_addr => '192.168.11.101',<br>
-  },<br>
-  :client => {<br>
-        :box_name => "centos/7",<br>
-        :box_version => "1804.02",<br>
-        :ip_addr => '192.168.11.102',<br>
-  },<br>
-} <br>
+ ```bash 
 
+MACHINES = {
+  :server => {
+        :box_name => "centos/7",
+        :box_version => "1804.02",
+        :ip_addr => '192.168.11.101',
+  },
+  :client => {
+        :box_name => "centos/7",
+        :box_version => "1804.02",
+        :ip_addr => '192.168.11.102',
+  },
+} 
+```
 
 так же, чтобы избежать ошибки ""rsync" could not be found on your PATH. Make sure that rsync is properly installed on your system and available on the PATH.", следуя руководству по ссылке https://qna.habr.com/q/271364, необходимо установить плагин vagrant-vbguest:
 
