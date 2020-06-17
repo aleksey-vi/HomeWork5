@@ -156,7 +156,7 @@ all_squash — все подключения будут выполнятся о�
     exportfs -r
 
 ### Стартуем файрвол и разрешаем в нём NFS
-
+    
     systemctl start firewalld.service
     firewall-cmd --permanent --zone=public --add-service=nfs
     firewall-cmd --permanent --zone=public --add-service=mountd
@@ -166,7 +166,8 @@ all_squash — все подключения будут выполнятся о�
     firewall-cmd --permanent --add-port=2049/tcp --zone=public
     firewall-cmd --permanent --add-port=2049/udp --zone=public
     firewall-cmd --reload
-
+### Включаем поддержку вывода Escape последовательностей 
+    echo -e
 ### Не забывает включить обратно Selinux командой: <br>
 
     selinuxenabled 1
