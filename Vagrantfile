@@ -33,3 +33,71 @@ Vagrant.configure("2") do |config|
 			end
 		end
 end
+	config.vm.define "server" do |server|
+        	server.vm.provision "shell", inline: <<-SHELL
+		echo "Устанавливаем гостевой плагин"
+			vagrant plugin install vagrant-vbguest
+		echo "Отключаем SELINUX"
+            		setenforce 0
+            	echo SELINUX=disabled > /etc/selinux/config
+		echo "Установим необходимый софт"
+        		yum install rpcbind nfs-utils -y -q > /dev/null 2>&1
+        	echo "Включаем серверы NFS"
+        		systemctl enable rpcbind nfs-server > /dev/null 2>&1
+        		systemctl start rpcbind nfs-server
+		echo "Создаем каталоги"
+        		mkdir -p /var/nfs/upload
+        		chmod -R 777 /var/nfs/upload
+		echo "Установка текстового редактора"
+			yum install Nano
+		echo "Добавляем NFS каталог в /etc/exports"
+            		echo "/var/nfs 192.168.11.0/24(rw,sync,no_root_squash,no_all_squash)" >> /etc/exports
+            	echo "Вручную запускаем перечитывание конфиг файла"
+			exportfs -r
+		echo "Стартуем файрволл и разрешаем в нём NFS"
+            		systemctl start firewalld.service
+            		firewall-cmd --permanent --zone=public --add-service=nfs > /dev/null 2>&1
+            		firewall-cmd --permanent --zone=public --add-service=mountd > /dev/null 2>&1
+            		firewall-cmd --permanent --zone=public --add-service=rpc-bind > /dev/null 2>&1
+            		firewall-cmd --permanent --add-port=4001/udp --zone=public > /dev/null 2>&1
+            		firewall-cmd --permanent --add-port=4001/tcp --zone=public > /dev/null 2>&1
+            		firewall-cmd --permanent --add-port=2049/tcp --zone=public > /dev/null 2>&1
+            		firewall-cmd --permanent --add-port=2049/udp --zone=public > /dev/null 2>&1
+            		firewall-cmd --reload > /dev/null 2>&1
+		echo "не забывает включить обратно Selinux командой:"
+			selinuxenabled 1
+		echo "Включаем поддержку вывода Escape последовательностей"
+			echo -e "Далее настройка клиента.\n"
+        SHELL
+	end
+       config.vm.define "client" do |client|
+       		client.vm.provision "shell", inline: <<-SHELL
+		echo "Установим необходимый софт"
+          		yum install nfs-utils -q -y 
+          	echo "Стартуем нужные сервисы"
+          		systemctl start rpcbind
+          		systemctl enable rpcbind 
+          	echo "Создаем и монтируем NFS директорию по UDP"
+          		mkdir /mnt/nfs-share
+          		mount -t nfs 192.168.11.101:/var/nfs/ /mnt/nfs-share/ -o udp
+		echo "Создадим файл test.txt в директории /mnt/nfs-share/upload"
+          		touch /mnt/nfs-share/upload/test.txt
+          	echo "вывод комманды ls /mnt/nfs-share/upload: `ls /mnt/nfs-share/upload`"
+          	echo "Добавим монтирование NFS директории в /etc/fstab"
+          		echo "192.168.11.101:/var/nfs /mnt/nfs-share/ nfs defaults,udp 0 0" >> /etc/fstab
+
+       SHELL
+       end
+  end
+
+
+
+
+
+
+
+
+
+
+
+
