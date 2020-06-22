@@ -32,7 +32,6 @@ Vagrant.configure("2") do |config|
 			SHELL
 			end
 		end
-end
 	config.vm.define "server" do |server|
         	server.vm.provision "shell", inline: <<-SHELL
 		echo "Устанавливаем гостевой плагин"
